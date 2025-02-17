@@ -5,7 +5,10 @@ const referRoutes = require("./routes/referRoute");
 
 const app = express();
 app.use(express.json()); 
-app.use(cors());
+
+app.use(cors({
+    origin: "https://accrediantask-rho.vercel.app",
+}));
 
 app.use("/api/referrals", referRoutes);
 app.get("/", (req, res) => {
