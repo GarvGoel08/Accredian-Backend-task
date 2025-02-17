@@ -21,7 +21,7 @@ const submitReferral = async (req, res) => {
       data: { friendName, friendEmail, friendPhone, friendCourse, userName, userEmail, userPhone },
     });
 
-    await sendReferralEmail(friendEmail, userName);
+    await sendReferralEmail(friendEmail, friendName, userName);
 
     res.status(201).json({ message: "Referral submitted successfully!", referral: newReferral });
   } catch (error) {
@@ -38,7 +38,7 @@ const getAllReferrals = async (req, res) => {
   }
 };
 
-const sendReferralEmail = async (friendEmail, userName) => {
+const sendReferralEmail = async (friendEmail, friendName, userName) => {
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS },
@@ -49,7 +49,7 @@ const sendReferralEmail = async (friendEmail, userName) => {
     to: friendEmail,
     subject: "You've Been Referred!",
     // To send: Referral Link attatched in email
-    text: `Hi! ${userName} has referred you for a course. Check it out!`,
+    text: `Hi! ${friendName} has referred you for a course by ${userName}. Check it out!`,
   };
 
   await transporter.sendMail(mailOptions);
